@@ -1,0 +1,32 @@
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+
+<service-builder package-path="com.nam.srv42">
+    <author>hp</author>
+	<namespace>srvv</namespace>
+	<entity name="Record" remote-service="false" local-service="true"
+		uuid="true" cache-enabled="false" json-enabled="false">
+
+		<!-- PK fields -->
+
+		<column name="recordId" primary="true" type="long"></column>
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long"></column>
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long"></column>
+		<column name="userId" type="long"></column>
+		<column name="userName" type="String"></column>
+		<column name="createDate" type="Date"></column>
+		<column name="modifiedDate" type="Date"></column>
+        <column name="name" type="String"></column>
+        <column name="date" type="Date"></column>
+        <column name="employer" type="String"></column>
+        <column name="salary" type="int"></column>
+        <finder name="GroupId" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+        </finder>
+	</entity>
+</service-builder>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.nam.srv42.model.Record">
+		<field name="uuid" type="String" />
+		<field name="recordId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="userId" type="long" />
+		<field name="userName" type="String" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="name" type="String">
+			<hint name="max-length">200</hint>
+		</field>
+		<field name="date" type="Date" />
+		<field name="employer" type="String" />
+		<field name="salary" type="int" />
+	</model>
+</model-hints>
