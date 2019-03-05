@@ -7,13 +7,18 @@ import com.nam.parser.ParseProcess;
 import com.nam.parser.ParseReader;
 import com.nam.srv42.service.RecordLocalServiceUtil;
 
+import java.util.Calendar;
 import java.util.Date;
+
+import javax.xml.bind.DatatypeConverter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.lang.Math.max;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class ParseProcessImpl implements ParseProcess {
@@ -32,19 +37,22 @@ public class ParseProcessImpl implements ParseProcess {
     	log.info("{} Store to DataBase", ++i);
     	
     	int salary = max(parseReader.getSalaryFrom(), parseReader.getSalaryTo());
-    	
-    	//SimpleDateFromat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");//2019-03-05 15:55:11.419
-    	//Calendar
-    	log.info("Date {}", new Date(parseReader.getPublishedAt()));
-    	
-    	SimpleDateFormat format = new SimpleDateFromat("yyyy-MM-dd HH:mm:ss:SSS");
-    	
+
 		try {
 			log.info(parseReader.toString());
-			
+
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+			Date date = new Date();
+
+			try{
+	            date = df.parse(parseReader.getPublishedAt());
+	        }catch (ParseException e){
+	            log.error("Error", e);
+	        }
+	    	
 			RecordLocalServiceUtil.addRecord(serviceContext.getUserId(),
 					parseReader.getName(),
-					new Date(),
+					date,
 					parseReader.getEmployerName(),
 					salary, serviceContext);
 			
