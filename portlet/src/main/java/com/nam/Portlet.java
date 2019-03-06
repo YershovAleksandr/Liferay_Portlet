@@ -31,8 +31,6 @@ public class Portlet extends MVCPortlet {
 	public void addRecords(ActionRequest request, ActionResponse response) throws PortalException, SystemException{	
 		log.info("Add records!!!");
 		
-		State.getInstance().reset();
-		
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(Record.class.getName(), request);
 		
         ParseProcess parseProcess = new ParseProcessImpl(serviceContext);
@@ -46,8 +44,6 @@ public class Portlet extends MVCPortlet {
 	
 	public void removeRecords(ActionRequest request, ActionResponse response) throws PortalException, SystemException{
 		log.info("Remove records!!!");
-		
-		State.getInstance().reset();
 		
 		RecordLocalServiceUtil.removeRecords();
 	}	

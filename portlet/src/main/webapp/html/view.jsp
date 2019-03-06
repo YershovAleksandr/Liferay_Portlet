@@ -51,7 +51,6 @@
 	String stateOrderByCol = null;
 	String stateOrderByType = null;
 	
-	//if (Validator.isBlank(orderByCol) && Validator.isBlank(orderByType)){
 	if (Validator.isBlank(orderByCol)){
 		System.out.println("Paginations");
 	}else{
@@ -78,75 +77,30 @@
 
 	stateOrderByCol = (String)renderRequest.getPortletSession().getAttribute("StateOrderByCol", PortletSession.PORTLET_SCOPE);
 	stateOrderByType = (String)renderRequest.getPortletSession().getAttribute("StateOrderByType", PortletSession.PORTLET_SCOPE);
-	
-	/*if (Validator.isBlank(orderByCol)){
-		System.out.println("orderByCol blank");
-	}else{
-		System.out.println("orderByCol !blank");
-	}*/
 
-	/*if (Validator.isNull(orderByCol)){
-		System.out.println("orderByCol null");
-	}else{
-		System.out.println("orderByCol !null");
-	}*/
-
-	/*if (Validator.isBlank(orderByType)){
-		System.out.println("orderByType blank");
-	}else{
-		System.out.println("orderByType !blank");
-	}
-
-	if (Validator.isNull(orderByType)){
-		System.out.println("orderByType null");
-	}else{
-		System.out.println("orderByType !null");
-	}*/
-	
-	
-	String sortingOrder = stateOrderByType;
-	
-	orderByType = stateOrderByType;
-	
-	/*if (orderByType.equals("desc")){
-		orderByType = "asc";
-	}else{
-		orderByType = "desc";
-	}
-
-	if (Validator.isNull(orderByType)){
-		orderByType = "desc";
-	}*/
-	
-	State.getInstance().reset2();
-	
-	
 %>
 
 <%-- orderByType="desc" --%>
-<liferay-ui:search-container total="<%=RecordLocalServiceUtil.getRecordsCount() %>" orderByType="<%=orderByType %>">
+<liferay-ui:search-container total="<%=RecordLocalServiceUtil.getRecordsCount() %>" orderByType="<%=stateOrderByType %>">
 	<%-- liferay-ui:search-container-results results="<%=RecordLocalServiceUtil.getRecords(scopeGroupId, searchContainer.getStart(), searchContainer.getEnd()) %>" /--%>
 	<liferay-ui:search-container-results>
 		<%
-			List<Record> allRecords = RecordLocalServiceUtil.getRecords(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-			List<Record> recordsPerPage = ListUtil.subList(allRecords, searchContainer.getStart(), searchContainer.getEnd());
 			int totalRecords = RecordLocalServiceUtil.getRecordsCount();
 			
-			List<Record> sortableRecords = new ArrayList<Record>(recordsPerPage);
-			//if (Validator.isNotNull(orderByCol)){
-				BeanComparator comparator = new BeanComparator(stateOrderByCol);
-				
-				Collections.sort(sortableRecords, comparator);
-				if (sortingOrder.equalsIgnoreCase("asc")){
-					
-				}else{
-					Collections.reverse(sortableRecords);
-				}
-			//}
+			List<Record> allRecords = RecordLocalServiceUtil.getRecords(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			List<Record> sortableRecords = new ArrayList<Record>(allRecords);
+
+			BeanComparator comparator = new BeanComparator(stateOrderByCol);
+			Collections.sort(sortableRecords, comparator);
+
+			if (stateOrderByType.equalsIgnoreCase("desc")){
+				Collections.reverse(sortableRecords);
+			}
 			
-			pageContext.setAttribute("results", sortableRecords);
+			List<Record> recordsPerPage = ListUtil.subList(sortableRecords, searchContainer.getStart(), searchContainer.getEnd());
+			
+			pageContext.setAttribute("results", recordsPerPage);
 			pageContext.setAttribute("total", totalRecords);
-		
 		%>
 	</liferay-ui:search-container-results>
 
