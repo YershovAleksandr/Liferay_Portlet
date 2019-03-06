@@ -32,8 +32,8 @@ public class Parser {
 
     //api restrictions
     final private int MAX_PER_PAGE = 100;
-    //final private int MAX_ITEMS = 2000;
-    final private int MAX_ITEMS = 100;
+    final private int MAX_ITEMS = 2000;
+    //final private int MAX_ITEMS = 100;
 
     private ParseReader parseReader;
 

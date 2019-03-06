@@ -1,16 +1,11 @@
 package com.nam;
 
-import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.service.ServiceContext;
 import com.nam.parser.ParseProcess;
 import com.nam.parser.ParseReader;
 import com.nam.srv42.service.RecordLocalServiceUtil;
 
-import java.util.Calendar;
 import java.util.Date;
-
-import javax.xml.bind.DatatypeConverter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,12 +51,8 @@ public class ParseProcessImpl implements ParseProcess {
 					parseReader.getEmployerName(),
 					salary, serviceContext);
 			
-			//SessionMessages.add(request, "recordAdded");
-			
 		}catch(Exception ex) {
 			ex.printStackTrace();
-			//SessionErrors.add(request, ex.getClass().getName());
-			
 		}
     }
 }
