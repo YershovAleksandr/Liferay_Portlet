@@ -60,8 +60,6 @@ public class RecordLocalServiceClp implements RecordLocalService {
     private String[] _methodParameterTypes25;
     private String _methodName26;
     private String[] _methodParameterTypes26;
-    private String _methodName27;
-    private String[] _methodParameterTypes27;
 
     public RecordLocalServiceClp(InvokableLocalService invokableLocalService) {
         _invokableLocalService = invokableLocalService;
@@ -174,22 +172,16 @@ public class RecordLocalServiceClp implements RecordLocalService {
 
         _methodParameterTypes24 = new String[] { "long", "int", "int" };
 
-        _methodName25 = "getRecordsByName";
+        _methodName25 = "addRecord";
 
         _methodParameterTypes25 = new String[] {
-                "long", "java.lang.String", "int", "int"
-            };
-
-        _methodName26 = "addRecord";
-
-        _methodParameterTypes26 = new String[] {
                 "long", "java.lang.String", "java.util.Date", "java.lang.String",
                 "int", "com.liferay.portal.service.ServiceContext"
             };
 
-        _methodName27 = "removeRecords";
+        _methodName26 = "removeRecords";
 
-        _methodParameterTypes27 = new String[] {  };
+        _methodParameterTypes26 = new String[] {  };
     }
 
     @Override
@@ -878,42 +870,6 @@ public class RecordLocalServiceClp implements RecordLocalService {
     }
 
     @Override
-    public java.util.List<com.nam.srv42.model.Record> getRecordsByName(
-        long groupId, java.lang.String name, int start, int end)
-        throws com.liferay.portal.kernel.exception.SystemException {
-        Object returnObj = null;
-
-        try {
-            returnObj = _invokableLocalService.invokeMethod(_methodName25,
-                    _methodParameterTypes25,
-                    new Object[] {
-                        groupId,
-                        
-                    ClpSerializer.translateInput(name),
-                        
-                    start,
-                        
-                    end
-                    });
-        } catch (Throwable t) {
-            t = ClpSerializer.translateThrowable(t);
-
-            if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-                throw (com.liferay.portal.kernel.exception.SystemException) t;
-            }
-
-            if (t instanceof RuntimeException) {
-                throw (RuntimeException) t;
-            } else {
-                throw new RuntimeException(t.getClass().getName() +
-                    " is not a valid exception");
-            }
-        }
-
-        return (java.util.List<com.nam.srv42.model.Record>) ClpSerializer.translateOutput(returnObj);
-    }
-
-    @Override
     public com.nam.srv42.model.Record addRecord(long userId,
         java.lang.String name, java.util.Date date, java.lang.String employer,
         int salary, com.liferay.portal.service.ServiceContext serviceContext)
@@ -922,8 +878,8 @@ public class RecordLocalServiceClp implements RecordLocalService {
         Object returnObj = null;
 
         try {
-            returnObj = _invokableLocalService.invokeMethod(_methodName26,
-                    _methodParameterTypes26,
+            returnObj = _invokableLocalService.invokeMethod(_methodName25,
+                    _methodParameterTypes25,
                     new Object[] {
                         userId,
                         
@@ -963,8 +919,8 @@ public class RecordLocalServiceClp implements RecordLocalService {
     public void removeRecords()
         throws com.liferay.portal.kernel.exception.SystemException {
         try {
-            _invokableLocalService.invokeMethod(_methodName27,
-                _methodParameterTypes27, new Object[] {  });
+            _invokableLocalService.invokeMethod(_methodName26,
+                _methodParameterTypes26, new Object[] {  });
         } catch (Throwable t) {
             t = ClpSerializer.translateThrowable(t);
 

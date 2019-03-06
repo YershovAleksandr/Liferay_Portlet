@@ -331,12 +331,6 @@ public class RecordLocalServiceUtil {
         return getService().getRecords(groupId, start, end);
     }
 
-    public static java.util.List<com.nam.srv42.model.Record> getRecordsByName(
-        long groupId, java.lang.String name, int start, int end)
-        throws com.liferay.portal.kernel.exception.SystemException {
-        return getService().getRecordsByName(groupId, name, start, end);
-    }
-
     public static com.nam.srv42.model.Record addRecord(long userId,
         java.lang.String name, java.util.Date date, java.lang.String employer,
         int salary, com.liferay.portal.service.ServiceContext serviceContext)

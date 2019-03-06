@@ -24,10 +24,6 @@ import com.nam.srv42.service.RecordLocalServiceUtil;
 public class Portlet extends MVCPortlet {
 	private static Logger log = LoggerFactory.getLogger(Portlet.class);
 	
-	static{
-		log.info("Hello блядь!");
-	} 
-
 	public void addRecords(ActionRequest request, ActionResponse response) throws PortalException, SystemException{	
 		log.info("Add records!!!");
 		
@@ -47,8 +43,4 @@ public class Portlet extends MVCPortlet {
 		
 		RecordLocalServiceUtil.removeRecords();
 	}
-	
-	//@Override
-	//public void render(RenderRequest renderRequest, RenderResponse) throws PortletException, IOException
-	
 }

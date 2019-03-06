@@ -10,54 +10,20 @@
 
 <aui:form action="<%= addRecordsURL %>" name="<portlet:namespace />">
 	<aui:fieldset>
-	<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
-	<aui:button type="submit" value="базу данных" ></aui:button>
-	<aui:button type="submit" value="данных" ></aui:button>
 		<aui:button-row>
 			<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
-			<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
 		</aui:button-row>
-	<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
-	<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
-		
 	</aui:fieldset>
 </aui:form>
-
-<aui:form action="<%= addRecordsURL %>" name="<portlet:namespace />">
-	<aui:fieldset>
-	<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
-	<aui:button type="submit" value="базу данных" ></aui:button>
-	<aui:button type="submit" value="данных" ></aui:button>
-	<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
-	</aui:fieldset>
-</aui:form>
-
-<aui:form action="<%= addRecordsURL %>" name="<portlet:namespace />">
-	<aui:fieldset>
-	<aui:button type="submit" value="Заполнить" ></aui:button>
-	<aui:button type="submit" value="базу" ></aui:button>
-	<aui:button type="submit" value="данных" ></aui:button>
-	</aui:fieldset>
-</aui:form>
-<aui:select name="slct" title="title">wtf</aui:select>
 
 <%
 	String orderByCol = ParamUtil.getString(request, "orderByCol");
-	String orderByType = ParamUtil.getString(request, "orderByType");
-	
-	System.out.println("orderByCol " + orderByCol);
-	System.out.println("orderByType " + orderByType);
+	//String orderByType = ParamUtil.getString(request, "orderByType");
 	
 	String stateOrderByCol = null;
 	String stateOrderByType = null;
 	
-	if (Validator.isBlank(orderByCol)){
-		System.out.println("Paginations");
-		
-		//renderRequest.getPortletSession().setAttribute("StateOrderByType", "asc", PortletSession.PORTLET_SCOPE);
-	}else{
-		System.out.println("Change sort status");
-		
+	if (!Validator.isBlank(orderByCol)){
 		stateOrderByCol = (String)renderRequest.getPortletSession().getAttribute("StateOrderByCol", PortletSession.PORTLET_SCOPE);
 		
 		if (orderByCol.equals(stateOrderByCol)){
@@ -73,23 +39,17 @@
 			renderRequest.getPortletSession().setAttribute("StateOrderByType", "asc", PortletSession.PORTLET_SCOPE);
 		}
 	}
-	
-	System.out.println("StateOrderByCol = " + (String)renderRequest.getPortletSession().getAttribute("StateOrderByCol", PortletSession.PORTLET_SCOPE));
-	System.out.println("StateOrderByType = " + (String)renderRequest.getPortletSession().getAttribute("StateOrderByType", PortletSession.PORTLET_SCOPE));
 
 	stateOrderByCol = (String)renderRequest.getPortletSession().getAttribute("StateOrderByCol", PortletSession.PORTLET_SCOPE);
 	stateOrderByType = (String)renderRequest.getPortletSession().getAttribute("StateOrderByType", PortletSession.PORTLET_SCOPE);
-
 %>
 
-<liferay-ui:search-container total="<%=RecordLocalServiceUtil.getRecordsCount() %>" orderByType="<%=stateOrderByType %>">
+<liferay-ui:search-container orderByType="<%=stateOrderByType %>">
 	<liferay-ui:search-container-results>
 		<%
 			int totalRecords = RecordLocalServiceUtil.getRecordsCount();
 			
-			//List<Record> allRecords = RecordLocalServiceUtil.getRecords(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 			List<Record> allRecords = RecordLocalServiceUtil.getRecords(scopeGroupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-			//List<Record> allRecords = RecordLocalServiceUtil.getRecordsByName(scopeGroupId, "%Senior%", QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 			List<Record> sortableRecords = new ArrayList<Record>(allRecords);
 
 			if (!Validator.isBlank(stateOrderByCol)){

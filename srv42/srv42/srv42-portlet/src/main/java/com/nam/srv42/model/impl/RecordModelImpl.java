@@ -79,9 +79,8 @@ public class RecordModelImpl extends BaseModelImpl<Record>
             true);
     public static long COMPANYID_COLUMN_BITMASK = 1L;
     public static long GROUPID_COLUMN_BITMASK = 2L;
-    public static long NAME_COLUMN_BITMASK = 4L;
-    public static long UUID_COLUMN_BITMASK = 8L;
-    public static long RECORDID_COLUMN_BITMASK = 16L;
+    public static long UUID_COLUMN_BITMASK = 4L;
+    public static long RECORDID_COLUMN_BITMASK = 8L;
     public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
                 "lock.expiration.time.com.nam.srv42.model.Record"));
     private static ClassLoader _classLoader = Record.class.getClassLoader();
@@ -101,7 +100,6 @@ public class RecordModelImpl extends BaseModelImpl<Record>
     private Date _createDate;
     private Date _modifiedDate;
     private String _name;
-    private String _originalName;
     private Date _date;
     private String _employer;
     private int _salary;
@@ -377,17 +375,7 @@ public class RecordModelImpl extends BaseModelImpl<Record>
 
     @Override
     public void setName(String name) {
-        _columnBitmask |= NAME_COLUMN_BITMASK;
-
-        if (_originalName == null) {
-            _originalName = _name;
-        }
-
         _name = name;
-    }
-
-    public String getOriginalName() {
-        return GetterUtil.getString(_originalName);
     }
 
     @Override
@@ -531,8 +519,6 @@ public class RecordModelImpl extends BaseModelImpl<Record>
         recordModelImpl._originalCompanyId = recordModelImpl._companyId;
 
         recordModelImpl._setOriginalCompanyId = false;
-
-        recordModelImpl._originalName = recordModelImpl._name;
 
         recordModelImpl._columnBitmask = 0;
     }
