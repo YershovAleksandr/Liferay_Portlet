@@ -11,6 +11,7 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -152,6 +153,23 @@ public class RecordPersistenceImpl extends BasePersistenceImpl<Record>
             FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByGroupId",
             new String[] { Long.class.getName() });
     private static final String _FINDER_COLUMN_GROUPID_GROUPID_2 = "record.groupId = ?";
+    public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N = new FinderPath(RecordModelImpl.ENTITY_CACHE_ENABLED,
+            RecordModelImpl.FINDER_CACHE_ENABLED, RecordImpl.class,
+            FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_N",
+            new String[] {
+                Long.class.getName(), String.class.getName(),
+                
+            Integer.class.getName(), Integer.class.getName(),
+                OrderByComparator.class.getName()
+            });
+    public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_N = new FinderPath(RecordModelImpl.ENTITY_CACHE_ENABLED,
+            RecordModelImpl.FINDER_CACHE_ENABLED, Long.class,
+            FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_N",
+            new String[] { Long.class.getName(), String.class.getName() });
+    private static final String _FINDER_COLUMN_G_N_GROUPID_2 = "record.groupId = ? AND ";
+    private static final String _FINDER_COLUMN_G_N_NAME_1 = "record.name LIKE NULL";
+    private static final String _FINDER_COLUMN_G_N_NAME_2 = "record.name LIKE ?";
+    private static final String _FINDER_COLUMN_G_N_NAME_3 = "(record.name IS NULL OR record.name LIKE '')";
     private static final String _SQL_SELECT_RECORD = "SELECT record FROM Record record";
     private static final String _SQL_SELECT_RECORD_WHERE = "SELECT record FROM Record record WHERE ";
     private static final String _SQL_COUNT_RECORD = "SELECT COUNT(record) FROM Record record";
@@ -1855,6 +1873,515 @@ public class RecordPersistenceImpl extends BasePersistenceImpl<Record>
                 QueryPos qPos = QueryPos.getInstance(q);
 
                 qPos.add(groupId);
+
+                count = (Long) q.uniqueResult();
+
+                FinderCacheUtil.putResult(finderPath, finderArgs, count);
+            } catch (Exception e) {
+                FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+                throw processException(e);
+            } finally {
+                closeSession(session);
+            }
+        }
+
+        return count.intValue();
+    }
+
+    /**
+     * Returns all the records where groupId = &#63; and name LIKE &#63;.
+     *
+     * @param groupId the group ID
+     * @param name the name
+     * @return the matching records
+     * @throws SystemException if a system exception occurred
+     */
+    @Override
+    public List<Record> findByG_N(long groupId, String name)
+        throws SystemException {
+        return findByG_N(groupId, name, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+            null);
+    }
+
+    /**
+     * Returns a range of all the records where groupId = &#63; and name LIKE &#63;.
+     *
+     * <p>
+     * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.nam.srv42.model.impl.RecordModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+     * </p>
+     *
+     * @param groupId the group ID
+     * @param name the name
+     * @param start the lower bound of the range of records
+     * @param end the upper bound of the range of records (not inclusive)
+     * @return the range of matching records
+     * @throws SystemException if a system exception occurred
+     */
+    @Override
+    public List<Record> findByG_N(long groupId, String name, int start, int end)
+        throws SystemException {
+        return findByG_N(groupId, name, start, end, null);
+    }
+
+    /**
+     * Returns an ordered range of all the records where groupId = &#63; and name LIKE &#63;.
+     *
+     * <p>
+     * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.nam.srv42.model.impl.RecordModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+     * </p>
+     *
+     * @param groupId the group ID
+     * @param name the name
+     * @param start the lower bound of the range of records
+     * @param end the upper bound of the range of records (not inclusive)
+     * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+     * @return the ordered range of matching records
+     * @throws SystemException if a system exception occurred
+     */
+    @Override
+    public List<Record> findByG_N(long groupId, String name, int start,
+        int end, OrderByComparator orderByComparator) throws SystemException {
+        boolean pagination = true;
+        FinderPath finderPath = null;
+        Object[] finderArgs = null;
+
+        finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_N;
+        finderArgs = new Object[] { groupId, name, start, end, orderByComparator };
+
+        List<Record> list = (List<Record>) FinderCacheUtil.getResult(finderPath,
+                finderArgs, this);
+
+        if ((list != null) && !list.isEmpty()) {
+            for (Record record : list) {
+                if ((groupId != record.getGroupId()) ||
+                        !StringUtil.wildcardMatches(record.getName(), name,
+                            CharPool.UNDERLINE, CharPool.PERCENT,
+                            CharPool.BACK_SLASH, true)) {
+                    list = null;
+
+                    break;
+                }
+            }
+        }
+
+        if (list == null) {
+            StringBundler query = null;
+
+            if (orderByComparator != null) {
+                query = new StringBundler(4 +
+                        (orderByComparator.getOrderByFields().length * 3));
+            } else {
+                query = new StringBundler(4);
+            }
+
+            query.append(_SQL_SELECT_RECORD_WHERE);
+
+            query.append(_FINDER_COLUMN_G_N_GROUPID_2);
+
+            boolean bindName = false;
+
+            if (name == null) {
+                query.append(_FINDER_COLUMN_G_N_NAME_1);
+            } else if (name.equals(StringPool.BLANK)) {
+                query.append(_FINDER_COLUMN_G_N_NAME_3);
+            } else {
+                bindName = true;
+
+                query.append(_FINDER_COLUMN_G_N_NAME_2);
+            }
+
+            if (orderByComparator != null) {
+                appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+                    orderByComparator);
+            } else
+             if (pagination) {
+                query.append(RecordModelImpl.ORDER_BY_JPQL);
+            }
+
+            String sql = query.toString();
+
+            Session session = null;
+
+            try {
+                session = openSession();
+
+                Query q = session.createQuery(sql);
+
+                QueryPos qPos = QueryPos.getInstance(q);
+
+                qPos.add(groupId);
+
+                if (bindName) {
+                    qPos.add(name);
+                }
+
+                if (!pagination) {
+                    list = (List<Record>) QueryUtil.list(q, getDialect(),
+                            start, end, false);
+
+                    Collections.sort(list);
+
+                    list = new UnmodifiableList<Record>(list);
+                } else {
+                    list = (List<Record>) QueryUtil.list(q, getDialect(),
+                            start, end);
+                }
+
+                cacheResult(list);
+
+                FinderCacheUtil.putResult(finderPath, finderArgs, list);
+            } catch (Exception e) {
+                FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+                throw processException(e);
+            } finally {
+                closeSession(session);
+            }
+        }
+
+        return list;
+    }
+
+    /**
+     * Returns the first record in the ordered set where groupId = &#63; and name LIKE &#63;.
+     *
+     * @param groupId the group ID
+     * @param name the name
+     * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+     * @return the first matching record
+     * @throws com.nam.srv42.NoSuchRecordException if a matching record could not be found
+     * @throws SystemException if a system exception occurred
+     */
+    @Override
+    public Record findByG_N_First(long groupId, String name,
+        OrderByComparator orderByComparator)
+        throws NoSuchRecordException, SystemException {
+        Record record = fetchByG_N_First(groupId, name, orderByComparator);
+
+        if (record != null) {
+            return record;
+        }
+
+        StringBundler msg = new StringBundler(6);
+
+        msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+        msg.append("groupId=");
+        msg.append(groupId);
+
+        msg.append(", name=");
+        msg.append(name);
+
+        msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+        throw new NoSuchRecordException(msg.toString());
+    }
+
+    /**
+     * Returns the first record in the ordered set where groupId = &#63; and name LIKE &#63;.
+     *
+     * @param groupId the group ID
+     * @param name the name
+     * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+     * @return the first matching record, or <code>null</code> if a matching record could not be found
+     * @throws SystemException if a system exception occurred
+     */
+    @Override
+    public Record fetchByG_N_First(long groupId, String name,
+        OrderByComparator orderByComparator) throws SystemException {
+        List<Record> list = findByG_N(groupId, name, 0, 1, orderByComparator);
+
+        if (!list.isEmpty()) {
+            return list.get(0);
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the last record in the ordered set where groupId = &#63; and name LIKE &#63;.
+     *
+     * @param groupId the group ID
+     * @param name the name
+     * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+     * @return the last matching record
+     * @throws com.nam.srv42.NoSuchRecordException if a matching record could not be found
+     * @throws SystemException if a system exception occurred
+     */
+    @Override
+    public Record findByG_N_Last(long groupId, String name,
+        OrderByComparator orderByComparator)
+        throws NoSuchRecordException, SystemException {
+        Record record = fetchByG_N_Last(groupId, name, orderByComparator);
+
+        if (record != null) {
+            return record;
+        }
+
+        StringBundler msg = new StringBundler(6);
+
+        msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+        msg.append("groupId=");
+        msg.append(groupId);
+
+        msg.append(", name=");
+        msg.append(name);
+
+        msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+        throw new NoSuchRecordException(msg.toString());
+    }
+
+    /**
+     * Returns the last record in the ordered set where groupId = &#63; and name LIKE &#63;.
+     *
+     * @param groupId the group ID
+     * @param name the name
+     * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+     * @return the last matching record, or <code>null</code> if a matching record could not be found
+     * @throws SystemException if a system exception occurred
+     */
+    @Override
+    public Record fetchByG_N_Last(long groupId, String name,
+        OrderByComparator orderByComparator) throws SystemException {
+        int count = countByG_N(groupId, name);
+
+        if (count == 0) {
+            return null;
+        }
+
+        List<Record> list = findByG_N(groupId, name, count - 1, count,
+                orderByComparator);
+
+        if (!list.isEmpty()) {
+            return list.get(0);
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the records before and after the current record in the ordered set where groupId = &#63; and name LIKE &#63;.
+     *
+     * @param recordId the primary key of the current record
+     * @param groupId the group ID
+     * @param name the name
+     * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+     * @return the previous, current, and next record
+     * @throws com.nam.srv42.NoSuchRecordException if a record with the primary key could not be found
+     * @throws SystemException if a system exception occurred
+     */
+    @Override
+    public Record[] findByG_N_PrevAndNext(long recordId, long groupId,
+        String name, OrderByComparator orderByComparator)
+        throws NoSuchRecordException, SystemException {
+        Record record = findByPrimaryKey(recordId);
+
+        Session session = null;
+
+        try {
+            session = openSession();
+
+            Record[] array = new RecordImpl[3];
+
+            array[0] = getByG_N_PrevAndNext(session, record, groupId, name,
+                    orderByComparator, true);
+
+            array[1] = record;
+
+            array[2] = getByG_N_PrevAndNext(session, record, groupId, name,
+                    orderByComparator, false);
+
+            return array;
+        } catch (Exception e) {
+            throw processException(e);
+        } finally {
+            closeSession(session);
+        }
+    }
+
+    protected Record getByG_N_PrevAndNext(Session session, Record record,
+        long groupId, String name, OrderByComparator orderByComparator,
+        boolean previous) {
+        StringBundler query = null;
+
+        if (orderByComparator != null) {
+            query = new StringBundler(6 +
+                    (orderByComparator.getOrderByFields().length * 6));
+        } else {
+            query = new StringBundler(3);
+        }
+
+        query.append(_SQL_SELECT_RECORD_WHERE);
+
+        query.append(_FINDER_COLUMN_G_N_GROUPID_2);
+
+        boolean bindName = false;
+
+        if (name == null) {
+            query.append(_FINDER_COLUMN_G_N_NAME_1);
+        } else if (name.equals(StringPool.BLANK)) {
+            query.append(_FINDER_COLUMN_G_N_NAME_3);
+        } else {
+            bindName = true;
+
+            query.append(_FINDER_COLUMN_G_N_NAME_2);
+        }
+
+        if (orderByComparator != null) {
+            String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+            if (orderByConditionFields.length > 0) {
+                query.append(WHERE_AND);
+            }
+
+            for (int i = 0; i < orderByConditionFields.length; i++) {
+                query.append(_ORDER_BY_ENTITY_ALIAS);
+                query.append(orderByConditionFields[i]);
+
+                if ((i + 1) < orderByConditionFields.length) {
+                    if (orderByComparator.isAscending() ^ previous) {
+                        query.append(WHERE_GREATER_THAN_HAS_NEXT);
+                    } else {
+                        query.append(WHERE_LESSER_THAN_HAS_NEXT);
+                    }
+                } else {
+                    if (orderByComparator.isAscending() ^ previous) {
+                        query.append(WHERE_GREATER_THAN);
+                    } else {
+                        query.append(WHERE_LESSER_THAN);
+                    }
+                }
+            }
+
+            query.append(ORDER_BY_CLAUSE);
+
+            String[] orderByFields = orderByComparator.getOrderByFields();
+
+            for (int i = 0; i < orderByFields.length; i++) {
+                query.append(_ORDER_BY_ENTITY_ALIAS);
+                query.append(orderByFields[i]);
+
+                if ((i + 1) < orderByFields.length) {
+                    if (orderByComparator.isAscending() ^ previous) {
+                        query.append(ORDER_BY_ASC_HAS_NEXT);
+                    } else {
+                        query.append(ORDER_BY_DESC_HAS_NEXT);
+                    }
+                } else {
+                    if (orderByComparator.isAscending() ^ previous) {
+                        query.append(ORDER_BY_ASC);
+                    } else {
+                        query.append(ORDER_BY_DESC);
+                    }
+                }
+            }
+        } else {
+            query.append(RecordModelImpl.ORDER_BY_JPQL);
+        }
+
+        String sql = query.toString();
+
+        Query q = session.createQuery(sql);
+
+        q.setFirstResult(0);
+        q.setMaxResults(2);
+
+        QueryPos qPos = QueryPos.getInstance(q);
+
+        qPos.add(groupId);
+
+        if (bindName) {
+            qPos.add(name);
+        }
+
+        if (orderByComparator != null) {
+            Object[] values = orderByComparator.getOrderByConditionValues(record);
+
+            for (Object value : values) {
+                qPos.add(value);
+            }
+        }
+
+        List<Record> list = q.list();
+
+        if (list.size() == 2) {
+            return list.get(1);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Removes all the records where groupId = &#63; and name LIKE &#63; from the database.
+     *
+     * @param groupId the group ID
+     * @param name the name
+     * @throws SystemException if a system exception occurred
+     */
+    @Override
+    public void removeByG_N(long groupId, String name)
+        throws SystemException {
+        for (Record record : findByG_N(groupId, name, QueryUtil.ALL_POS,
+                QueryUtil.ALL_POS, null)) {
+            remove(record);
+        }
+    }
+
+    /**
+     * Returns the number of records where groupId = &#63; and name LIKE &#63;.
+     *
+     * @param groupId the group ID
+     * @param name the name
+     * @return the number of matching records
+     * @throws SystemException if a system exception occurred
+     */
+    @Override
+    public int countByG_N(long groupId, String name) throws SystemException {
+        FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_N;
+
+        Object[] finderArgs = new Object[] { groupId, name };
+
+        Long count = (Long) FinderCacheUtil.getResult(finderPath, finderArgs,
+                this);
+
+        if (count == null) {
+            StringBundler query = new StringBundler(3);
+
+            query.append(_SQL_COUNT_RECORD_WHERE);
+
+            query.append(_FINDER_COLUMN_G_N_GROUPID_2);
+
+            boolean bindName = false;
+
+            if (name == null) {
+                query.append(_FINDER_COLUMN_G_N_NAME_1);
+            } else if (name.equals(StringPool.BLANK)) {
+                query.append(_FINDER_COLUMN_G_N_NAME_3);
+            } else {
+                bindName = true;
+
+                query.append(_FINDER_COLUMN_G_N_NAME_2);
+            }
+
+            String sql = query.toString();
+
+            Session session = null;
+
+            try {
+                session = openSession();
+
+                Query q = session.createQuery(sql);
+
+                QueryPos qPos = QueryPos.getInstance(q);
+
+                qPos.add(groupId);
+
+                if (bindName) {
+                    qPos.add(name);
+                }
 
                 count = (Long) q.uniqueResult();
 

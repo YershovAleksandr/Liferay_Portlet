@@ -301,6 +301,11 @@ public interface RecordLocalService extends BaseLocalService,
         int start, int end)
         throws com.liferay.portal.kernel.exception.SystemException;
 
+    @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+    public java.util.List<com.nam.srv42.model.Record> getRecordsByName(
+        long groupId, java.lang.String name, int start, int end)
+        throws com.liferay.portal.kernel.exception.SystemException;
+
     public com.nam.srv42.model.Record addRecord(long userId,
         java.lang.String name, java.util.Date date, java.lang.String employer,
         int salary, com.liferay.portal.service.ServiceContext serviceContext)

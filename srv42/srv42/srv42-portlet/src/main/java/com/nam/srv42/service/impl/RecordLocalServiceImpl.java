@@ -37,6 +37,10 @@ public class RecordLocalServiceImpl extends RecordLocalServiceBaseImpl {
 	public List<Record> getRecords(long groupId, int start, int end) throws SystemException{
 		return recordPersistence.findByGroupId(groupId, start, end);
 	}
+
+	public List<Record> getRecordsByName(long groupId, String name, int start, int end) throws SystemException{
+		return recordPersistence.findByG_N(groupId, name, start, end);
+	}
 	
 	public Record addRecord(long userId, String name, Date date, String employer, int salary, ServiceContext serviceContext)
 			throws SystemException, PortalException{

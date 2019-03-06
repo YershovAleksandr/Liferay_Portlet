@@ -87,7 +87,9 @@
 		<%
 			int totalRecords = RecordLocalServiceUtil.getRecordsCount();
 			
-			List<Record> allRecords = RecordLocalServiceUtil.getRecords(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			//List<Record> allRecords = RecordLocalServiceUtil.getRecords(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			List<Record> allRecords = RecordLocalServiceUtil.getRecords(scopeGroupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+			//List<Record> allRecords = RecordLocalServiceUtil.getRecordsByName(scopeGroupId, "%Senior%", QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 			List<Record> sortableRecords = new ArrayList<Record>(allRecords);
 
 			if (!Validator.isBlank(stateOrderByCol)){
@@ -98,6 +100,7 @@
 					Collections.reverse(sortableRecords);
 				}
 			}
+			
 			List<Record> recordsPerPage = ListUtil.subList(sortableRecords, searchContainer.getStart(), searchContainer.getEnd());
 			
 			pageContext.setAttribute("results", recordsPerPage);

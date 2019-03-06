@@ -46,6 +46,9 @@ public class Portlet extends MVCPortlet {
 		log.info("Remove records!!!");
 		
 		RecordLocalServiceUtil.removeRecords();
-	}	
+	}
+	
+	//@Override
+	//public void render(RenderRequest renderRequest, RenderResponse) throws PortletException, IOException
 	
 }

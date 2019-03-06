@@ -11,9 +11,16 @@
 <%@ page import="java.util.ArrayList" %>
 
 <%@ page import="com.liferay.portal.kernel.util.ListUtil" %>
+<%@ page import="com.liferay.portal.kernel.dao.orm.DynamicQuery" %>
+<%@ page import="com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil" %>
+<%@ page import="com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil" %>
+<%@ page import="com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil" %>
 <%@ page import="com.liferay.portal.kernel.dao.orm.QueryUtil" %>
 
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.PortalClassLoaderUtil" %>
+<%@ page import="com.liferay.portal.kernel.portlet.PortletClassLoaderUtil" %>
+
 <%@ page import="com.liferay.portal.kernel.util.Validator" %>
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.StringPool" %>

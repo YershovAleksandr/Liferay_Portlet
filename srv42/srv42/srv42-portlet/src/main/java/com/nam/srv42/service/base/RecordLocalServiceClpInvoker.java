@@ -61,6 +61,8 @@ public class RecordLocalServiceClpInvoker {
     private String[] _methodParameterTypes44;
     private String _methodName45;
     private String[] _methodParameterTypes45;
+    private String _methodName46;
+    private String[] _methodParameterTypes46;
 
     public RecordLocalServiceClpInvoker() {
         _methodName0 = "addRecord";
@@ -171,16 +173,22 @@ public class RecordLocalServiceClpInvoker {
 
         _methodParameterTypes43 = new String[] { "long", "int", "int" };
 
-        _methodName44 = "addRecord";
+        _methodName44 = "getRecordsByName";
 
         _methodParameterTypes44 = new String[] {
+                "long", "java.lang.String", "int", "int"
+            };
+
+        _methodName45 = "addRecord";
+
+        _methodParameterTypes45 = new String[] {
                 "long", "java.lang.String", "java.util.Date", "java.lang.String",
                 "int", "com.liferay.portal.service.ServiceContext"
             };
 
-        _methodName45 = "removeRecords";
+        _methodName46 = "removeRecords";
 
-        _methodParameterTypes45 = new String[] {  };
+        _methodParameterTypes46 = new String[] {  };
     }
 
     public Object invokeMethod(String name, String[] parameterTypes,
@@ -322,6 +330,14 @@ public class RecordLocalServiceClpInvoker {
 
         if (_methodName44.equals(name) &&
                 Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
+            return RecordLocalServiceUtil.getRecordsByName(((Long) arguments[0]).longValue(),
+                (java.lang.String) arguments[1],
+                ((Integer) arguments[2]).intValue(),
+                ((Integer) arguments[3]).intValue());
+        }
+
+        if (_methodName45.equals(name) &&
+                Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
             return RecordLocalServiceUtil.addRecord(((Long) arguments[0]).longValue(),
                 (java.lang.String) arguments[1], (java.util.Date) arguments[2],
                 (java.lang.String) arguments[3],
@@ -329,8 +345,8 @@ public class RecordLocalServiceClpInvoker {
                 (com.liferay.portal.service.ServiceContext) arguments[5]);
         }
 
-        if (_methodName45.equals(name) &&
-                Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
+        if (_methodName46.equals(name) &&
+                Arrays.deepEquals(_methodParameterTypes46, parameterTypes)) {
             RecordLocalServiceUtil.removeRecords();
 
             return null;

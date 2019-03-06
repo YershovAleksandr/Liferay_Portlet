@@ -28,5 +28,10 @@
         <finder name="GroupId" return-type="Collection">
             <finder-column name="groupId"></finder-column>
         </finder>
+        <finder name="G_N" return-type="Collection">
+            <finder-column name="groupId"></finder-column>
+            <finder-column name="name" comparator="LIKE"></finder-column>
+        </finder>
+        
 	</entity>
 </service-builder>
