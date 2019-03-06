@@ -17,31 +17,35 @@
 </aui:form>
 
 <%
+	final String STATE_ORDER_BY_COL = "StateOrderByCol";
+	final String STATE_ORDER_BY_TYPE = "StateOrderByType";
+	final String ASC = "asc";
+	final String DESC = "desc";
+
 	String orderByCol = ParamUtil.getString(request, "orderByCol");
-	//String orderByType = ParamUtil.getString(request, "orderByType");
 	
 	String stateOrderByCol = null;
 	String stateOrderByType = null;
 	
 	if (!Validator.isBlank(orderByCol)){
-		stateOrderByCol = (String)renderRequest.getPortletSession().getAttribute("StateOrderByCol", PortletSession.PORTLET_SCOPE);
+		stateOrderByCol = (String)renderRequest.getPortletSession().getAttribute(STATE_ORDER_BY_COL, PortletSession.PORTLET_SCOPE);
 		
 		if (orderByCol.equals(stateOrderByCol)){
-			stateOrderByType = (String)renderRequest.getPortletSession().getAttribute("StateOrderByType", PortletSession.PORTLET_SCOPE);
+			stateOrderByType = (String)renderRequest.getPortletSession().getAttribute(STATE_ORDER_BY_TYPE, PortletSession.PORTLET_SCOPE);
 			
-			if (stateOrderByType.equals("asc")){
-				renderRequest.getPortletSession().setAttribute("StateOrderByType", "desc", PortletSession.PORTLET_SCOPE);
+			if (stateOrderByType.equals(ASC)){
+				renderRequest.getPortletSession().setAttribute(STATE_ORDER_BY_TYPE, DESC, PortletSession.PORTLET_SCOPE);
 			}else{
-				renderRequest.getPortletSession().setAttribute("StateOrderByType", "asc", PortletSession.PORTLET_SCOPE);
+				renderRequest.getPortletSession().setAttribute(STATE_ORDER_BY_TYPE, ASC, PortletSession.PORTLET_SCOPE);
 			}
 		}else{
-			renderRequest.getPortletSession().setAttribute("StateOrderByCol", orderByCol, PortletSession.PORTLET_SCOPE);
-			renderRequest.getPortletSession().setAttribute("StateOrderByType", "asc", PortletSession.PORTLET_SCOPE);
+			renderRequest.getPortletSession().setAttribute(STATE_ORDER_BY_COL, orderByCol, PortletSession.PORTLET_SCOPE);
+			renderRequest.getPortletSession().setAttribute(STATE_ORDER_BY_TYPE, ASC, PortletSession.PORTLET_SCOPE);
 		}
 	}
 
-	stateOrderByCol = (String)renderRequest.getPortletSession().getAttribute("StateOrderByCol", PortletSession.PORTLET_SCOPE);
-	stateOrderByType = (String)renderRequest.getPortletSession().getAttribute("StateOrderByType", PortletSession.PORTLET_SCOPE);
+	stateOrderByCol = (String)renderRequest.getPortletSession().getAttribute(STATE_ORDER_BY_COL, PortletSession.PORTLET_SCOPE);
+	stateOrderByType = (String)renderRequest.getPortletSession().getAttribute(STATE_ORDER_BY_TYPE, PortletSession.PORTLET_SCOPE);
 %>
 
 <liferay-ui:search-container orderByType="<%=stateOrderByType %>">
@@ -56,11 +60,11 @@
 				BeanComparator comparator = new BeanComparator(stateOrderByCol);
 				Collections.sort(sortableRecords, comparator);
 
-				if (stateOrderByType.equalsIgnoreCase("desc")){
+				if (stateOrderByType.equalsIgnoreCase(DESC)){
 					Collections.reverse(sortableRecords);
 				}
 			}
-			
+
 			List<Record> recordsPerPage = ListUtil.subList(sortableRecords, searchContainer.getStart(), searchContainer.getEnd());
 			
 			pageContext.setAttribute("results", recordsPerPage);
