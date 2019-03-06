@@ -18,6 +18,9 @@
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.StringPool" %>
 
+<%@ page import="com.nam.State" %>
+<%@ page import="javax.portlet.PortletSession" %>
+
 <%@ page import="com.nam.srv42.model.Record" %>
 <%@ page import="com.nam.srv42.service.RecordLocalServiceUtil" %>
 

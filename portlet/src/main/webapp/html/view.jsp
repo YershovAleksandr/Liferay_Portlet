@@ -10,11 +10,36 @@
 
 <aui:form action="<%= addRecordsURL %>" name="<portlet:namespace />">
 	<aui:fieldset>
+	<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
+	<aui:button type="submit" value="базу данных" ></aui:button>
+	<aui:button type="submit" value="данных" ></aui:button>
 		<aui:button-row>
 			<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
+			<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
 		</aui:button-row>
+	<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
+	<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
+		
 	</aui:fieldset>
 </aui:form>
+
+<aui:form action="<%= addRecordsURL %>" name="<portlet:namespace />">
+	<aui:fieldset>
+	<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
+	<aui:button type="submit" value="базу данных" ></aui:button>
+	<aui:button type="submit" value="данных" ></aui:button>
+	<aui:button type="submit" value="Заполнить базу данных" ></aui:button>
+	</aui:fieldset>
+</aui:form>
+
+<aui:form action="<%= addRecordsURL %>" name="<portlet:namespace />">
+	<aui:fieldset>
+	<aui:button type="submit" value="Заполнить" ></aui:button>
+	<aui:button type="submit" value="базу" ></aui:button>
+	<aui:button type="submit" value="данных" ></aui:button>
+	</aui:fieldset>
+</aui:form>
+<aui:select name="slct" title="title">wtf</aui:select>
 
 <%
 	String orderByCol = ParamUtil.getString(request, "orderByCol");
@@ -22,10 +47,68 @@
 	
 	System.out.println("orderByCol " + orderByCol);
 	System.out.println("orderByType " + orderByType);
-			
-	String sortingOrder = orderByType;
 	
-	if (orderByType.equals("desc")){
+	String stateOrderByCol = null;
+	String stateOrderByType = null;
+	
+	//if (Validator.isBlank(orderByCol) && Validator.isBlank(orderByType)){
+	if (Validator.isBlank(orderByCol)){
+		System.out.println("Paginations");
+	}else{
+		System.out.println("Change sort status");
+		
+		stateOrderByCol = (String)renderRequest.getPortletSession().getAttribute("StateOrderByCol", PortletSession.PORTLET_SCOPE);
+		
+		if (stateOrderByCol.equals(orderByCol)){
+			stateOrderByType = (String)renderRequest.getPortletSession().getAttribute("StateOrderByType", PortletSession.PORTLET_SCOPE);
+			
+			if (stateOrderByType.equals("asc")){
+				renderRequest.getPortletSession().setAttribute("StateOrderByType", "desc", PortletSession.PORTLET_SCOPE);
+			}else{
+				renderRequest.getPortletSession().setAttribute("StateOrderByType", "asc", PortletSession.PORTLET_SCOPE);
+			}
+		}else{
+			renderRequest.getPortletSession().setAttribute("StateOrderByCol", orderByCol, PortletSession.PORTLET_SCOPE);
+			renderRequest.getPortletSession().setAttribute("StateOrderByType", "asc", PortletSession.PORTLET_SCOPE);
+		}
+	}
+	
+	System.out.println("StateOrderByCol = " + (String)renderRequest.getPortletSession().getAttribute("StateOrderByCol", PortletSession.PORTLET_SCOPE));
+	System.out.println("StateOrderByType = " + (String)renderRequest.getPortletSession().getAttribute("StateOrderByType", PortletSession.PORTLET_SCOPE));
+
+	stateOrderByCol = (String)renderRequest.getPortletSession().getAttribute("StateOrderByCol", PortletSession.PORTLET_SCOPE);
+	stateOrderByType = (String)renderRequest.getPortletSession().getAttribute("StateOrderByType", PortletSession.PORTLET_SCOPE);
+	
+	/*if (Validator.isBlank(orderByCol)){
+		System.out.println("orderByCol blank");
+	}else{
+		System.out.println("orderByCol !blank");
+	}*/
+
+	/*if (Validator.isNull(orderByCol)){
+		System.out.println("orderByCol null");
+	}else{
+		System.out.println("orderByCol !null");
+	}*/
+
+	/*if (Validator.isBlank(orderByType)){
+		System.out.println("orderByType blank");
+	}else{
+		System.out.println("orderByType !blank");
+	}
+
+	if (Validator.isNull(orderByType)){
+		System.out.println("orderByType null");
+	}else{
+		System.out.println("orderByType !null");
+	}*/
+	
+	
+	String sortingOrder = stateOrderByType;
+	
+	orderByType = stateOrderByType;
+	
+	/*if (orderByType.equals("desc")){
 		orderByType = "asc";
 	}else{
 		orderByType = "desc";
@@ -33,7 +116,9 @@
 
 	if (Validator.isNull(orderByType)){
 		orderByType = "desc";
-	}
+	}*/
+	
+	State.getInstance().reset2();
 	
 	
 %>
@@ -48,8 +133,8 @@
 			int totalRecords = RecordLocalServiceUtil.getRecordsCount();
 			
 			List<Record> sortableRecords = new ArrayList<Record>(recordsPerPage);
-			if (Validator.isNotNull(orderByCol)){
-				BeanComparator comparator = new BeanComparator(orderByCol);
+			//if (Validator.isNotNull(orderByCol)){
+				BeanComparator comparator = new BeanComparator(stateOrderByCol);
 				
 				Collections.sort(sortableRecords, comparator);
 				if (sortingOrder.equalsIgnoreCase("asc")){
@@ -57,7 +142,7 @@
 				}else{
 					Collections.reverse(sortableRecords);
 				}
-			}
+			//}
 			
 			pageContext.setAttribute("results", sortableRecords);
 			pageContext.setAttribute("total", totalRecords);
