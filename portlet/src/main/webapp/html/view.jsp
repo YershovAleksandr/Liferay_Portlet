@@ -53,12 +53,14 @@
 	
 	if (Validator.isBlank(orderByCol)){
 		System.out.println("Paginations");
+		
+		//renderRequest.getPortletSession().setAttribute("StateOrderByType", "asc", PortletSession.PORTLET_SCOPE);
 	}else{
 		System.out.println("Change sort status");
 		
 		stateOrderByCol = (String)renderRequest.getPortletSession().getAttribute("StateOrderByCol", PortletSession.PORTLET_SCOPE);
 		
-		if (stateOrderByCol.equals(orderByCol)){
+		if (orderByCol.equals(stateOrderByCol)){
 			stateOrderByType = (String)renderRequest.getPortletSession().getAttribute("StateOrderByType", PortletSession.PORTLET_SCOPE);
 			
 			if (stateOrderByType.equals("asc")){
@@ -80,9 +82,7 @@
 
 %>
 
-<%-- orderByType="desc" --%>
 <liferay-ui:search-container total="<%=RecordLocalServiceUtil.getRecordsCount() %>" orderByType="<%=stateOrderByType %>">
-	<%-- liferay-ui:search-container-results results="<%=RecordLocalServiceUtil.getRecords(scopeGroupId, searchContainer.getStart(), searchContainer.getEnd()) %>" /--%>
 	<liferay-ui:search-container-results>
 		<%
 			int totalRecords = RecordLocalServiceUtil.getRecordsCount();
@@ -90,13 +90,14 @@
 			List<Record> allRecords = RecordLocalServiceUtil.getRecords(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 			List<Record> sortableRecords = new ArrayList<Record>(allRecords);
 
-			BeanComparator comparator = new BeanComparator(stateOrderByCol);
-			Collections.sort(sortableRecords, comparator);
+			if (!Validator.isBlank(stateOrderByCol)){
+				BeanComparator comparator = new BeanComparator(stateOrderByCol);
+				Collections.sort(sortableRecords, comparator);
 
-			if (stateOrderByType.equalsIgnoreCase("desc")){
-				Collections.reverse(sortableRecords);
+				if (stateOrderByType.equalsIgnoreCase("desc")){
+					Collections.reverse(sortableRecords);
+				}
 			}
-			
 			List<Record> recordsPerPage = ListUtil.subList(sortableRecords, searchContainer.getStart(), searchContainer.getEnd());
 			
 			pageContext.setAttribute("results", recordsPerPage);
